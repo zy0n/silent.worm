@@ -39,7 +39,6 @@ RUN ln -s /home/worm-playground/memory/myenv/bin/pip /usr/local/bin/ai-pip
 RUN ldconfig
 # Activate the virtual environment
 # RUN pip install --trusted-host pypi.python.org pyautogen docker python-dotenv
-
 # Example: You can download your application here
 COPY silent /home/worm-playground/silent
 COPY .env /home/worm-playground

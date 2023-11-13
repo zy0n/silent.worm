@@ -24,7 +24,21 @@ from autogen.agentchat.assistant_agent import AssistantAgent
 import atexit
 
 
-base_directory = "./"
+def get_base_dir():
+    if is_running_in_docker():
+        return f"memory/{sub_directory}"
+    return f"./{sub_directory}"
+
+
+sub_directory = ""
+
+
+def set_sub_dir(directory):
+    global sub_directory
+    sub_directory = directory
+
+
+base_directory = get_base_dir()
 
 
 def exit_handler():

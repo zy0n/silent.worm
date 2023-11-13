@@ -1,9 +1,8 @@
 from worm.utilities import *
 
 from worm.team_group import *
-import worm.utilities as wut
 
-wut.base_directory = "./"
+set_sub_dir("team_dir")
 
 llm_config = {
     "seed": 42,  # seed for caching and reproducibility

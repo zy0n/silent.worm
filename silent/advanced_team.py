@@ -1,10 +1,8 @@
 import time
 from worm.utilities import *
-import worm.utilities as wut
-
 
 autogen.oai.completion.Completion.retry_wait_time = 60
-wut.base_directory = "./"
+set_sub_dir("advanced_team_dir")
 
 default_termination_message = (
     lambda x: x.get("content", "").rstrip().endswith("TERMINATE")
