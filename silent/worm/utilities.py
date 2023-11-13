@@ -16,8 +16,6 @@ from autogen.agentchat.groupchat import GroupChat
 from autogen.agentchat.agent import Agent
 from autogen.agentchat.assistant_agent import AssistantAgent
 
-# write a function to add 2 + 2
-
 # requires chromadb
 # from autogen.agentchat.contrib.teachable_agent import TeachableAgent
 
@@ -203,51 +201,6 @@ def text_to_image(prompt, filename):
     return "SUCCESS"
 
 
-def text_to_image_oldsauce(prompt, filename):
-    # Assuming 'client' is already defined and authenticated elsewhere
-    try:
-        payload = {
-            "model": "dall-e-3",
-            "prompt": prompt,
-            "size": "1024x1024",
-            "n": 1,
-        }
-        response = post_openai_call(url=OAI_IMAGE_GENERATION_URL, payload=payload)
-
-        print(response)
-    except requests.HTTPError as http_err:
-        return f"HTTP error occurred: {http_err}"
-    except Exception as err:
-        return f"An error occurred: {err}"
-
-    # Check if the response is successful and contains the expected data
-    if (
-        response.status_code == 200
-        and "data" in response.json()
-        and len(response.json()["data"]) > 0
-    ):
-        image_url = response.json()["data"][0]["url"]
-        # print(image_url)
-        # Download the image from the URL
-        return {"image_url": image_url}
-        image_response = requests.get(image_url)
-        # print(image_response)
-        # Check if the image was successfully downloaded
-        if image_response.status_code == 200:
-            # Save the image to a file
-            with open(filename, "wb") as file:
-                file.write(image_response.content)
-            print(f"Image saved as {filename}.")
-            return
-        else:
-            print("Failed to download the image.")
-            return "FAILED"
-    else:
-        print("Failed to generate the image.")
-    return "FAILED"
-    return "SUCCESS"
-
-
 func_text_to_speech = {
     "name": "text_to_speech",
     "description": "takes a string of text, and turns it into a spoken version.",
@@ -374,6 +327,22 @@ def save_to_file(content, filename):
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(content)
     print(f"File successfully saved to {file_path}")
+
+
+func_format_for_markdown = {
+    "name": "format_for_markdown",
+    "description": "transforms content into a form suitable for markdown files",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "content": {
+                "type": "string",
+                "description": "content to be formatted",
+            },
+        },
+        "required": ["content"],
+    },
+}
 
 
 def format_for_markdown(content):
@@ -515,138 +484,14 @@ def summary(content):
 def research(query):
     llm_config_researcher = {
         "functions": [
-            {
-                "name": "text_to_image",
-                "description": "generates a beautiful image given an input prompt",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "prompt": {
-                            "type": "string",
-                            "description": "accurate description of the desired image, do not include anything that desires text to be displayed",
-                        },
-                        # "filename": {
-                        #     "type": "string",
-                        #     "description": "location to store the returned image",
-                        # },
-                    },
-                    "required": ["prompt"],
-                },
-            },
-            {
-                "name": "save_to_file",
-                "description": "saves content to the provided filename",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "content": {
-                            "type": "string",
-                            "description": "content to be saved",
-                        },
-                        "filename": {
-                            "type": "string",
-                            "description": "location to store the file",
-                        },
-                    },
-                    "required": ["content", "filename"],
-                },
-            },
-            {
-                "name": "format_for_markdown",
-                "description": "transforms content into a form suitable for markdown files",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "content": {
-                            "type": "string",
-                            "description": "content to be formatted",
-                        },
-                    },
-                    "required": ["content"],
-                },
-            },
-            {
-                "name": "text_to_speech",
-                "description": "takes a string of text, and turns it into a spoken version.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "text": {
-                            "type": "string",
-                            "description": "the desired text to be spoken",
-                        },
-                    },
-                    "required": ["text"],
-                },
-            },
-            {
-                "name": "examine_image",
-                "description": "Get a detailed summary of what is in an image. Provide a question about what you're looking for, or a generalized idea.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "url": {
-                            "type": "string",
-                            "description": "url of the image to examine",
-                        },
-                        "prompt": {
-                            "type": "string",
-                            "description": "Provide details about your inquiry into the image.",
-                        },
-                    },
-                    "required": ["url", "prompt"],
-                },
-            },
-            {
-                "name": "search",
-                "description": "google search for relevant information",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "query": {
-                            "type": "string",
-                            "description": "Google search query",
-                        },
-                        # "num_results": {
-                        #     "type": "int",
-                        #     "description": "(Optional) Number of desired search results. Default is 10.",
-                        # },
-                    },
-                    "required": ["query"],
-                },
-            },
-            {
-                "name": "scrape",
-                "description": "Scraping website content based on url",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "url": {
-                            "type": "string",
-                            "description": "Website url to scrape",
-                        }
-                    },
-                    "required": ["url"],
-                },
-            },
-            {
-                "name": "advanced_search",
-                "description": "arXiv is a free distribution service and an open-access archive for nearly 2.4 million scholarly articles in the fields of physics, mathematics, computer science, quantitative biology, quantitative finance, statistics, electrical engineering and systems science, and economics. Materials on this site are not peer-reviewed by arXiv.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "query": {
-                            "type": "string",
-                            "description": "arXiv search query",
-                        },
-                        # "max_results": {
-                        #     "type": "int",
-                        #     "description": "(Optional) Maximum number of search results. Default is 10.",
-                        # },
-                    },
-                    "required": ["query"],
-                },
-            },
+            func_text_to_image,
+            func_save_to_file,
+            func_format_for_markdown,
+            func_text_to_speech,
+            func_examine_image,
+            func_search,
+            func_scrape,
+            func_advanced_search,
         ],
         "config_list": config_list,
     }
