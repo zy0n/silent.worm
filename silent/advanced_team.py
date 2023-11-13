@@ -2,14 +2,20 @@ import time
 from worm.utilities import *
 
 autogen.oai.completion.Completion.retry_wait_time = 60
+# autogen.oai.completion.Completion.cache_path = "./memory/.cache" # cant get this to work...? fix with docker copy
+
 set_sub_dir("advanced_team_dir/")
+# set after subdir
+# cache_path = f"{get_base_dir()}.cache"
+# print(cache_path)
+
 
 default_termination_message = (
     lambda x: x.get("content", "").rstrip().endswith("TERMINATE")
 )
 
 llm_config = {
-    "seed": 42,  # seed for caching and reproducibility
+    "seed": sandbox_cache_seed,  # seed for caching and reproducibility
     "config_list": config_list,  # a list of OpenAI API configurations
     "temperature": 0,  # temperature for sampling
     # "timeout": 120,

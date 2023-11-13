@@ -3,9 +3,13 @@ from worm.utilities import *
 from worm.team_group import *
 
 set_sub_dir("team_dir/")
+# set after subdir is set
+# autogen.Completion.set_cache(
+#     seed=sandbox_cache_seed, cache_path_root=f"{get_base_dir()}.cache"
+# ) # can get working?
 
 llm_config = {
-    "seed": 42,  # seed for caching and reproducibility
+    "seed": sandbox_cache_seed,  # seed for caching and reproducibility
     "config_list": config_list,  # a list of OpenAI API configurations
     "temperature": 0,  # temperature for sampling
     "timeout": 120,
@@ -53,7 +57,7 @@ def run_turbo_group(message):
     group_chat = CustomGroupChat(
         agents=list_of_agents,  # Include all agents
         messages=[
-            'Everyone cooperate and complete the task(s). Team A has A1, A2, A3. Team B has B1, B2. etc... Only members of the same team can talk to one another. Only team leaders (names ending with 1) can talk amongst themselves. Team leaders will delegate out who needs to do what, and who has what skills. You must use "NEXT: B1" to suggest talking to B1 for example; You can suggest only one person, you cannot suggest yourself or the previous speaker; You can also dont suggest anyone.'
+            "Everyone cooperate and complete the task(s). Team A has A1, A2, A3. Team B has B1, B2. etc... Only members of the same team can talk to one another. Only team leaders (names ending with 1) can talk amongst themselves. Team leaders will delegate out who needs to do what, and who has which skills."
         ],
         max_round=30,
     )
@@ -61,8 +65,10 @@ def run_turbo_group(message):
     # Create the manager
     turbo_llm_config = {
         "config_list": config_list,
-        "cache_seed": None,
-    }  # cache_seed is None because we want to observe if there is any communication pattern difference if we reran the group chat.
+        "cache_seed": None,  # cache_seed is None because we want to observe if there is any communication pattern difference if we reran the group chat.
+        # "cache_seed": sandbox_cache_seed,
+        # "cache_path": f"{get_base_dir()}cache/{sandbox_cache_seed}",
+    }
     turbo_manager = LimitedGroupChatManager(
         groupchat=group_chat, llm_config=turbo_llm_config
     )

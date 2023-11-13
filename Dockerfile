@@ -27,6 +27,8 @@ RUN apt-get install -y  libglib2.0-0
 RUN apt-get install -y  libgl1-mesa-glx
 FROM base as playground
 
+ENV XDG_CACHE_HOME=/home/worm-playground/memory/cache
+ENV PYTHONPYCACHEPREFIX=/home/worm-playground/memory/myenv/bytecache
 # Set the working directory
 WORKDIR /home/worm-playground
 
@@ -40,13 +42,15 @@ RUN ldconfig
 # Activate the virtual environment
 # RUN pip install --trusted-host pypi.python.org pyautogen docker python-dotenv
 # Example: You can download your application here
-COPY silent /home/worm-playground/silent
-COPY .env /home/worm-playground
-COPY docker/start.sh /home/worm-playground
+RUN mkdir -p /home/tmp
+COPY silent /home/tmp/silent
+COPY .env /home/tmp
+RUN chmod 644 /home/tmp/.env
+COPY docker/start.sh /home/tmp
 # COPY docker/brain.sh /home/worm-playground # not working rn?
-COPY requirements.txt /home/worm-playground/
-
+COPY requirements.txt /home/tmp
+COPY docker/copy.sh /home/tmp
 # RUN chmod +x /home/worm-playground/start.sh
 # RUN source start.sh
 
-# CMD [ "source /home/worm-playground/start.sh" ]
+CMD ["/bin/bash", "-c", "/home/tmp/copy.sh && /bin/bash"]

@@ -1,1 +1,1 @@
-docker run -v silent.worm:/home/worm-playground/memory -it --rm silentworm-ai:latest
+docker run -v silent.worm:/home/worm-playground -it --rm silentworm-ai:latest

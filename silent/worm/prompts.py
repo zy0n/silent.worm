@@ -67,15 +67,20 @@ def get_team_leader_info(name, team, all_team_leaders, all_team_members):
         f"You are a team leader {name}, your team consists of {comma.join(team)}."
     )
 
-    # if team_members:
-    #     other_team_leaders = set(all_team_leaders) - {name}
-    #     other_team_string = f"You can talk to your team and the other team leaders {comma.join(other_team_leader for other_team_leader in other_team_leaders)}."
-    #     # team_member_string = f"The team member{'s' if len(team_members) > 1 else ''} of your team are: {' and '.join(f'({comma.join(members)})' for team_leader, members in zip(all_team_leaders, all_team_members) if team_leader == name)}."
-    #     suggest_next_string = f"Use NEXT: {comma.join(other_team_leader for other_team_leader in other_team_leaders)} to suggest talking to others."
-    #     # return f"{team_leader_string} {TERMINATE_STRING}"
-    #     return f"{team_leader_string} {other_team_string} {suggest_next_string} {TERMINATE_STRING}"
-    # else:
-    return get_team_leader_prompt(f"{team_leader_string}")
+    if team_members:
+        other_team_leaders = set(all_team_leaders) - {name}
+        other_team_string = f"You can talk to your team and the other team leaders {comma.join(other_team_leader for other_team_leader in other_team_leaders)}."
+        # team_member_string = f"The team member{'s' if len(team_members) > 1 else ''} of your team are: {' and '.join(f'({comma.join(members)})' for team_leader, members in zip(all_team_leaders, all_team_members) if team_leader == name)}."
+        end_suggest = "You can suggest more than one person, you cannot suggest yourself or the previous speaker. You must suggest at least one person."
+
+        suggest_next_string = f"Use NEXT: {comma.join(other_team_leader for other_team_leader in other_team_leaders)} to suggest talking to others."
+        # return f"{team_leader_string} {TERMINATE_STRING}"
+        return get_team_leader_prompt(
+            f"{team_leader_string} {other_team_string} {suggest_next_string}"
+        )
+        # return f"{team_leader_string} {other_team_string} {suggest_next_string} {TERMINATE_STRING}"
+    else:
+        return get_team_leader_prompt(f"{team_leader_string}")
 
 
 def get_team_member_info(name, team_leader, all_team_leaders, all_team_members):
@@ -95,13 +100,16 @@ def get_team_member_info(name, team_leader, all_team_leaders, all_team_members):
     team_index = all_team_leaders.index(team_leader)
     team = all_team_members[team_index]
 
-    other_team_leaders = set(all_team_leaders) - {team_leader}
+    # other_team_leaders = set(all_team_leaders) - {team_leader}
     team_minus_me = set(team) - {name}
-    other_team_string = f"You can talk to the other team leaders {', '.join(other_team_leader for other_team_leader in other_team_leaders)}."
+    end_suggest = "You can suggest only one person, you cannot suggest yourself or the previous speaker. You may also suggest no one."
+    # other_team_string = f"You can talk to the other team leaders {', '.join(other_team_leader for other_team_leader in other_team_leaders)}."
     suggest_team_string = f"Use NEXT: {', '.join(team_member for team_member in [*team_minus_me, team_leader])} to suggest talking to other team members."
     team_member_string = f"You are a team member {name}, your team leader is {team_leader} and teammates ({', '.join(team_minus_me)})."
 
-    return get_team_assistant_prompt(f"{team_member_string}")
+    return get_team_assistant_prompt(
+        f"{team_member_string} {suggest_team_string} {end_suggest}"
+    )
     # return f"{team_member_string} {suggest_team_string} {TERMINATE_STRING}"
 
 
