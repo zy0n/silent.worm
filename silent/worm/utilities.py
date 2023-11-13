@@ -34,8 +34,9 @@ sub_directory = ""
 
 
 def set_sub_dir(directory):
-    global sub_directory
+    global sub_directory, base_directory
     sub_directory = directory
+    base_directory = get_base_dir()
 
 
 base_directory = get_base_dir()

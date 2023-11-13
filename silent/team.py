@@ -2,7 +2,7 @@ from worm.utilities import *
 
 from worm.team_group import *
 
-set_sub_dir("team_dir")
+set_sub_dir("team_dir/")
 
 llm_config = {
     "seed": 42,  # seed for caching and reproducibility
