@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "silent-worm"
+version = "0.1.0"
+description = "autogen ai-swarm"
+authors = ["zy0n"]
+license = "GPL"
+readme = "README.md"
+packages = [{include = "silent"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+setuptools = "^68.2.2"
+python-dotenv = "^1.0.0"
+pyautogen = "^0.1.14"
+beautifulsoup4 = "^4.12.2"
+langchain = "^0.0.335"
+googlesearch-python = "^1.2.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

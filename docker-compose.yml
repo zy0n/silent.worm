@@ -1,0 +1,17 @@
+version: '3.9'
+
+volumes:
+  silent.worm:
+    name: 'silent.worm'
+services:
+  ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: silent.worm
+    environment:
+      PYTHONPYCACHEPREFIX: /home/worm-playground/memory/myenv/bytecache"
+    volumes:
+      - silent.worm:/home/worm-playground/memory # Host path for data persistence
+    ports:
+      - "8080:80"  # Example port mapping

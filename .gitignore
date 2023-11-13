@@ -1,0 +1,7 @@
+.vscode
+.cache
+.venv
+.env
+__pycache__
+TODO-dev.md
+logs

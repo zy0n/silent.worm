@@ -1,0 +1,1 @@
+source memory/myenv/bin/activate
