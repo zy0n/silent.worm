@@ -45,6 +45,8 @@ What things you need to install the software and how to install them.
 
 ```
 Python 3.11
+========= docker use only ======
+docker 
 2GB hdd space for docker image
 ```
 
