@@ -454,7 +454,7 @@ def scrape(url):
 
 
 def summary(content):
-    llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-16k-0613")
+    llm = ChatOpenAI(temperature=0, model=api_model)
     text_splitter = RecursiveCharacterTextSplitter(
         separators=["\n\n", "\n"], chunk_size=10000, chunk_overlap=500
     )
