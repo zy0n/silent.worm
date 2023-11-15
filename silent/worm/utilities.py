@@ -15,6 +15,8 @@ import datetime
 from autogen.agentchat.groupchat import GroupChat
 from autogen.agentchat.agent import Agent
 from autogen.agentchat.assistant_agent import AssistantAgent
+import requests
+from urllib.parse import quote
 
 # requires chromadb
 # from autogen.agentchat.contrib.teachable_agent import TeachableAgent
@@ -363,8 +365,12 @@ func_search = {
                 "type": "string",
                 "description": "Google search query",
             },
+            "max_results": {
+                "type": "integer",
+                "description": "(Optional) Maximum number of search results. Default is 10.",
+            },
         },
-        "required": ["query"],
+        "required": ["query", "max_results"],
     },
 }
 
@@ -376,9 +382,6 @@ def web_search(query, num_results=10):
     return list(search(query, num_results=num_results))
 
 
-import requests
-from urllib.parse import quote
-
 func_advanced_search = {
     "name": "advanced_search",
     "description": "arXiv is a free distribution service and an open-access archive for nearly 2.4 million scholarly articles in the fields of physics, mathematics, computer science, quantitative biology, quantitative finance, statistics, electrical engineering and systems science, and economics. Materials on this site are not peer-reviewed by arXiv.",
@@ -389,12 +392,12 @@ func_advanced_search = {
                 "type": "string",
                 "description": "arXiv search query",
             },
-            # "max_results": {
-            #     "type": "int",
-            #     "description": "(Optional) Maximum number of search results. Default is 10.",
-            # },
+            "max_results": {
+                "type": "integer",
+                "description": "(Optional) Maximum number of search results. Default is 10.",
+            },
         },
-        "required": ["query"],
+        "required": ["query", "max_results"],
     },
 }
 
@@ -498,10 +501,7 @@ def research(query):
 
     research_assistant = autogen.AssistantAgent(
         name="research_assistant",
-        system_message=f"""
-        Welcome, Research Assistant.
-        Your task is to research the provided query extensively. 
-        Produce a detailed report, ensuring you include technical specifics and reference all sources. Conclude your report with "TERMINATE".
+        system_message=f"""You are a Research Assistant, your goal is to extensivly research the provided topic. Output Desired: a highly detailed outlined report of all technical specifics. Cite all references. At the end of the report, append an empty line and the word "TERMINATE"
         """,
         llm_config=llm_config_researcher,
     )
