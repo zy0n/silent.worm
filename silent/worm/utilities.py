@@ -86,7 +86,7 @@ def save_log():
 
 func_create_directory = {
     "name": "create_directory",
-    "description": f"creates a new directory in {base_directory}",
+    "description": f"creates a new directory",
     "parameters": {
         "type": "object",
         "properties": {
