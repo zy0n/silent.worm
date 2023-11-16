@@ -37,7 +37,10 @@ Silent.Worm is an innovative AI agent swarm designed to tackle complex tasks and
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+- create & fill .env file 
+```sh
+cp example.env .env
+```
 
 ### Prerequisites
 
@@ -45,6 +48,7 @@ What things you need to install the software and how to install them.
 
 ```
 Python 3.11
+openai api account
 ========= docker use only ======
 docker 
 2GB hdd space for docker image
