@@ -192,7 +192,6 @@ def spawn_task_expert(task):
     user_func_map = {
         **default_func_map,
     }
-    print(user_func_map)
     spawn_user = autogen.UserProxyAgent(
         name="Lilith",
         max_consecutive_auto_reply=1,  # terminate without auto-reply
