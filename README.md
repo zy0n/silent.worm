@@ -67,16 +67,28 @@ docker/update.sh # builds docker & launches
 
 ## 🎈 Usage <a name="usage"></a>
 - ###### Building Docker image & running.
+```sh
+docker/update.sh
+```
 ![Alt text](images/run_update.png)
 - ###### ... docker image built.
 ![Alt text](images/update_finished.png)
 - ###### home directory structure, memory is used as persistent data for the sandbox
 ![Alt text](images/home_dir_structure.png)
 - ###### load the python environment
+```sh
+source start.sh
+```
 ![Alt text](images/source_environment.png)
 - ###### running example team
+```sh
+python silent/team.py
+```
 ![Alt text](images/run_team.png)
 - ###### running example advanced team (can spawn their own agents, and have toolbelt of functionality) & example image generation task
+```sh
+python silent/advanced_team.py
+```
 ![Alt text](images/run_advanced.png)
 
 ## ⛏️ Built Using <a name = "built_using"></a>
