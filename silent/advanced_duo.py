@@ -5,9 +5,6 @@ autogen.oai.completion.Completion.retry_wait_time = 60
 # autogen.oai.completion.Completion.cache_path = "./memory/.cache" # cant get this to work...? fix with docker copy
 
 set_sub_dir("advanced_duo_dir/")
-# set after subdir
-# cache_path = f"{get_base_dir()}.cache"
-# print(cache_path)
 
 
 default_termination_message = (
@@ -18,16 +15,6 @@ llm_config = {
     "seed": sandbox_cache_seed,  # seed for caching and reproducibility
     "config_list": config_list,  # a list of OpenAI API configurations
     "temperature": 0,  # temperature for sampling
-    # "timeout": 120,
-    # "use_cache": False,
-}
-
-teachable_config = {
-    "verbosity": 0,
-    "reset_db": False,
-    "path_to_db_dir": "memory/agency/agent_memory_db",
-    "recall_threshold": 1.5,
-    "prepopulate": True,
 }
 
 
@@ -48,7 +35,6 @@ def generate_task_assistant(
         system_message=assistant_prompt,
         code_execution_config=code_execution_config,
         function_map=function_map,
-        # teach_config=teachable_config,
     )
     return assistant
 
@@ -185,28 +171,6 @@ default_func_map = {
 }
 
 
-def spawn_assistant(name, professional_description):
-    asst_func_map = {
-        **default_func_map,
-        "spawn_agent": spawn_assistant,
-    }
-    new_assistant = generate_task_assistant(
-        name=name,
-        professional_description=professional_description,
-        llm_config=spawn_asst_llm_config,
-        function_map=asst_func_map,
-        code_execution_config={
-            "work_dir": "memory/agency/",
-            "use_docker": False,
-            "last_n_messages": 3,
-        },
-    )
-    assistant_swarm.append(new_assistant)
-    update_swarm()
-    print("Just spawned %s" % name)
-    return "SPAWNED_AGENT"
-
-
 groupchat = None
 
 
@@ -220,13 +184,12 @@ def spawn_task_expert(task):
     autogen.ChatCompletion.start_logging(history_dict=chat_conversation, compact=True)
     spawn_boss = generate_task_assistant(
         name="Agent_Architect",
-        professional_description=AGI_AGENT,
+        professional_description=CODE_PLANNER_AGENT,
         llm_config=spawn_boss_llm_config,
     )
 
     user_func_map = {
         **default_func_map,
-        "spawn_agent": spawn_assistant,
     }
     print(user_func_map)
     spawn_user = autogen.UserProxyAgent(
@@ -243,36 +206,7 @@ def spawn_task_expert(task):
         "Work by yourself, the user won't reply until you output `TERMINATE` to end the conversation.",
     )
     spawn_user.initiate_chat(spawn_boss, message=task)
-
-    result = spawn_user.last_message()
-    if result["content"] == "TERMINATE":
-        # init a group chat eventually, but for now. talk to the task expert.
-        assistant_swarm.append(spawn_boss)
-        groupchat = LimitedGroupChat(agents=assistant_swarm, messages=[], max_round=99)
-        manager = LimitedGroupChatManager(
-            groupchat=groupchat, llm_config=spawn_boss_llm_config
-        )
-        updated_task = (
-            """Your collective task is: %s\nYou're hired. Go about your daily tasks, consult here with each other if you need information from a different department.  Only call a coder if you can give them exact specifics of what you desire, data-sources, complete list of things you need and from where. The coders task is soley to produce code for you to gather data and complete tasks that require real-world-interaction"""
-            % task
-        )
-        spawn_user.initiate_chat(manager, message=updated_task)
-
-    # HISTORY:
-    # conversation_log = f"""CONVERSATION_LOG:
-    # {format_json_to_string(autogen.ChatCompletion.logged_history)}
-    # """
-    # save_to_file(conversation_log, f"logs/{get_tmp_filename()}.log")
-    # autogen.ChatCompletion.stop_logging()
-
-    # spawn_boss.learn_from_user_feedback()
-    # spawn_boss.close_db()
-    # if len(assistant_swarm) > 0:
-    #     for ta in assistant_swarm:
-    #         ta.learn_from_user_feedback()
-    #         ta.close_db()
     return
-    # return spawn_user.last_message()["content"]
 
 
 def ask_an_expert(message):

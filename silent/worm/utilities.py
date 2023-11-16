@@ -484,6 +484,7 @@ def summary(content):
     return output
 
 
+# example not used
 def research(query):
     llm_config_researcher = {
         "functions": [
