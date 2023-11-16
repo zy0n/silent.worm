@@ -37,7 +37,7 @@ Silent.Worm is an innovative AI agent swarm designed to tackle complex tasks and
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment)
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
@@ -92,10 +92,22 @@ python silent/advanced_team.py
 ![Alt text](images/run_advanced.png)
 
 ## 🧙🏼‍♂️ What in the heck?
+###### So far: (more to come)
  - [team.py](silent/team.py) - demonstrates 3 teams working conjunctively, they may be modularly generated.
  - [advanced_duo.py](silent/advanced_duo.py) - demonstrates an arbitrary team, that can accomplish lots of tasks. 
  - [advanced_team.py](silent/advanced_team.py) - demonstrates an orchestrated modular team generation. Agents can decide who and what to spawn in the group, and delegate tasks as needed.
 
+## 🛠️ Some built-in functionality for the wormz
+- web searching
+- arXiv.org searching
+- basic scraping of a page
+- save anything to a filename
+- examine an image (by url, local images as well)
+- create narrations 
+- create directories
+- advanced url sanitizer
+- advanced arXiv pdf sanitizer
+- simple markdown formatting
 
 
 ## ⛏️ Built Using <a name = "built_using"></a>

@@ -131,39 +131,32 @@ func_update_group = {
     },
 }
 
+asst_func_list = [
+    func_spawn_agent,
+    func_ask_the_coder,
+    func_text_to_image,
+    func_text_to_speech,
+    func_examine_image,
+    func_save_to_file,
+    func_search,
+    func_scrape,
+    func_advanced_search,
+    func_create_directory,
+    func_sanitize_url,
+    func_sanitize_arXiv,
+    func_format_for_markdown,
+]
+
+
 spawn_boss_llm_config = {
     **llm_config,
     "request_timeout": 1000,
-    "functions": [
-        func_spawn_agent,
-        func_ask_the_coder,
-        func_text_to_image,
-        func_text_to_speech,
-        func_examine_image,
-        func_save_to_file,
-        func_search,
-        func_scrape,
-        func_advanced_search,
-        func_create_directory,
-        func_sanitize_arXiv,
-    ],
+    "functions": asst_func_list,
 }
 spawn_asst_llm_config = {
     **llm_config,
     "request_timeout": 1000,
-    "functions": [
-        func_ask_the_coder,
-        func_spawn_agent,
-        func_text_to_image,
-        func_text_to_speech,
-        func_examine_image,
-        func_save_to_file,
-        func_search,
-        func_scrape,
-        func_advanced_search,
-        func_create_directory,
-        func_sanitize_url,
-    ],
+    "functions": asst_func_list,
 }
 assistant_swarm = []
 
@@ -187,6 +180,7 @@ default_func_map = {
     "create_directory": create_directory,
     "sanitize_url": sanitize_url,
     "sanitize_arXiv": sanitize_arXiv,
+    "format_for_markdown": format_for_markdown,
 }
 
 
