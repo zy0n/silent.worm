@@ -79,7 +79,6 @@ func_update_group = {
 }
 
 asst_func_list = [
-    func_spawn_agent,
     func_text_to_image,
     func_text_to_speech,
     func_examine_image,
