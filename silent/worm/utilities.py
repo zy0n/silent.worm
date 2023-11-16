@@ -376,10 +376,9 @@ func_search = {
 
 
 # Define research function
-def web_search(query, num_results=10):
-    num_results = 10
+def web_search(query, max_results=10):
     # Perform a Google search using the provided query and return a list of URLs
-    return list(search(query, num_results=num_results))
+    return list(search(query, num_results=max_results))
 
 
 func_advanced_search = {

@@ -41,33 +41,6 @@ def generate_task_assistant(
     return assistant
 
 
-func_spawn_agent = {
-    "name": "spawn_agent",
-    "description": "Generate agent specifications based on task requirements.",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "name": {
-                "type": "string",
-                "description": "Specify agent name as KNOWLEDGE_Profession(e.g., EXPERT_Python_Developer) it must supply a match to this regex expression ^[a-zA-Z0-9_-]{1,64}",
-            },
-            "professional_description": {
-                "type": "string",
-                "description": """Describe a single task to accomplish based on the desired profession. 
-                They will report back once the task is complete.
-                Provide an input in the REQUIRED_FORMAT
-                
-                REQUIRED_FORMAT:
-                Function: - Describe a single task to accomplish based on the desired profession. 
-                Input Requirements: - Things they may need to accomplish their task. 
-                Expected Output: - What the output result of them completing their task should be. If they are generating reports, it will be the reports. If it is images, it will be descriptions of expected images. etc...
-                """,
-            },
-        },
-        "required": ["name", "professional_description"],
-    },
-}
-
 func_update_group = {
     "name": "update_group",
     "description": "After adding a new agent, the group must be updated.",
