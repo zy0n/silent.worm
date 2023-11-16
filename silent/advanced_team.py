@@ -1,5 +1,6 @@
 import time
 from worm.utilities import *
+from worm.sanitize import *
 
 autogen.oai.completion.Completion.retry_wait_time = 60
 # autogen.oai.completion.Completion.cache_path = "./memory/.cache" # cant get this to work...? fix with docker copy
@@ -144,6 +145,7 @@ spawn_boss_llm_config = {
         func_scrape,
         func_advanced_search,
         func_create_directory,
+        func_sanitize_arXiv,
     ],
 }
 spawn_asst_llm_config = {
@@ -160,6 +162,7 @@ spawn_asst_llm_config = {
         func_scrape,
         func_advanced_search,
         func_create_directory,
+        func_sanitize_url,
     ],
 }
 assistant_swarm = []
@@ -182,6 +185,8 @@ default_func_map = {
     "examine_image": examine_image,
     "text_to_image": text_to_image,
     "create_directory": create_directory,
+    "sanitize_url": sanitize_url,
+    "sanitize_arXiv": sanitize_arXiv,
 }
 
 
