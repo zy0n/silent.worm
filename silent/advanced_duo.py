@@ -41,46 +41,6 @@ def generate_task_assistant(
     return assistant
 
 
-def generate_code_agent():
-    return generate_task_assistant("EXPERT_Agent_Coder", CODE_PLANNER_AGENT)
-
-
-# AGENT DEFINITIONS
-code_agent = generate_code_agent()
-code_manager = autogen.UserProxyAgent(
-    name="Code_Manager",
-    max_consecutive_auto_reply=10,  # terminate without auto-reply
-    human_input_mode="NEVER",
-    code_execution_config={"work_dir": "memory/agency", "use_docker": False},
-)
-
-func_ask_the_coder = {
-    "name": "ask_code_manager",
-    "description": "is used to implore the assistance of a professional developer for a task, Make sure to have all imports installed prior to attempting to run any code.",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "message": {
-                "type": "string",
-                "description": "When formulating a question for the planner, provide comprehensive context. This should include the specific code that was used, the results or output from executing that code, and any relevant details from your interaction with the user that may impact the planner's understanding or response. The planner does not have access to previous exchanges between you and the user, so it is crucial to include all pertinent information in your query to ensure an informed and accurate assistance from the planner.",
-            },
-        },
-        "required": ["message"],
-    },
-}
-boss_llm_config = {
-    **llm_config,
-    "request_timeout": 1000,
-    "functions": [func_ask_the_coder],
-}
-
-
-def ask_the_coder(message):
-    code_manager.initiate_chat(code_agent, message=message)
-    # return the last message received from the planner
-    return code_manager.last_message()["content"]
-
-
 func_spawn_agent = {
     "name": "spawn_agent",
     "description": "Generate agent specifications based on task requirements.",
@@ -120,7 +80,6 @@ func_update_group = {
 
 asst_func_list = [
     func_spawn_agent,
-    func_ask_the_coder,
     func_text_to_image,
     func_text_to_speech,
     func_examine_image,
@@ -146,18 +105,7 @@ spawn_asst_llm_config = {
     "functions": asst_func_list,
 }
 
-assistant_swarm = []
-
-
-def update_swarm():
-    if groupchat is not None:
-        print("Updating GroupChat")
-        groupchat.agents = assistant_swarm
-    return "GROUP UPDATED"
-
-
 default_func_map = {
-    "ask_code_manager": ask_the_coder,
     "search": web_search,
     "advanced_search": search_arXiv,
     "scrape": scrape,
@@ -172,20 +120,16 @@ default_func_map = {
 }
 
 
-groupchat = None
-
-
 def spawn_task_expert(task):
     # an agent calls this function and passes in a task
     # spawn_boss determines what type of expert to create
     # spawn_boss has function to spawn agent
     # spawn_user calls that function given the responses from the spawn_boss?
-    global groupchat
     chat_conversation = {}
     autogen.ChatCompletion.start_logging(history_dict=chat_conversation, compact=True)
     spawn_boss = generate_task_assistant(
-        name="Agent_Architect",
-        professional_description=CODE_PLANNER_AGENT,
+        name="Zer0-Cool",
+        professional_description=AGENT_DUO_PROMPT,
         llm_config=spawn_boss_llm_config,
     )
 
@@ -198,7 +142,7 @@ def spawn_task_expert(task):
         human_input_mode="TERMINATE",
         function_map=user_func_map,
         code_execution_config={
-            "work_dir": "memory/coding",
+            "work_dir": f"memory/{base_directory}",
             "use_docker": False,
             "last_n_messages": 3,
         },
