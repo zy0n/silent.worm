@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 func_sanitize_arXiv = {
     "name": "sanitize_arXiv",
-    "description": "saves content to the provided filename",
+    "description": "scrapes an arXiv.org PDF, it returns just plain text.",
     "parameters": {
         "type": "object",
         "properties": {
