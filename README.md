@@ -91,6 +91,13 @@ python silent/advanced_team.py
 ```
 ![Alt text](images/run_advanced.png)
 
+## 🧙🏼‍♂️ What in the heck?
+ - [team.py](silent/team.py) - demonstrates 3 teams working conjunctively, they may be modularly generated.
+ - [advanced_duo.py](silent/advanced_duo.py) - demonstrates an arbitrary team, that can accomplish lots of tasks. 
+ - [advanced_team.py](silent/advanced_team.py) - demonstrates an orchestrated modular team generation. Agents can decide who and what to spawn in the group, and delegate tasks as needed.
+
+
+
 ## ⛏️ Built Using <a name = "built_using"></a>
 
 - [autogen](https://www.github.com/microsoft/autogen) - AI Agent Framework
