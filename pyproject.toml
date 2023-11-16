@@ -16,6 +16,7 @@ beautifulsoup4 = "^4.12.2"
 langchain = "^0.0.335"
 googlesearch-python = "^1.2.3"
 pypdf2 = "^3.0.1"
+tiktoken = "^0.5.1"
 
 
 [build-system]

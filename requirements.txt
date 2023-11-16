@@ -56,6 +56,7 @@ pyproject_hooks==1.0.0
 python-dotenv==1.0.0
 PyYAML==6.0.1
 rapidfuzz==3.5.2
+regex==2023.10.3
 requests==2.31.0
 requests-toolbelt==1.0.0
 shellingham==1.5.4
@@ -64,6 +65,7 @@ soupsieve==2.5
 SQLAlchemy==2.0.23
 tenacity==8.2.3
 termcolor==2.3.0
+tiktoken==0.5.1
 tomlkit==0.12.2
 tqdm==4.66.1
 trove-classifiers==2023.11.9
