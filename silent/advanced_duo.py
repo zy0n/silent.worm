@@ -63,6 +63,7 @@ asst_func_list = [
     func_sanitize_url,
     func_sanitize_arXiv,
     func_format_for_markdown,
+    func_summary,
 ]
 
 spawn_boss_llm_config = {
@@ -89,6 +90,7 @@ default_func_map = {
     "sanitize_url": sanitize_url,
     "sanitize_arXiv": sanitize_arXiv,
     "format_for_markdown": format_for_markdown,
+    "summary": summary,
 }
 
 

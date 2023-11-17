@@ -423,14 +423,18 @@ func_scrape = {
             "url": {
                 "type": "string",
                 "description": "Website url to scrape",
-            }
+            },
+            "question": {
+                "type": "string",
+                "description": "(Optional) a specific question about the url",
+            },
         },
         "required": ["url"],
     },
 }
 
 
-def scrape(url):
+def scrape(url, question=None):
     """Scrape a website and summarize its content if it's too large."""
     print("Scraping website...")
     try:
@@ -440,9 +444,13 @@ def scrape(url):
         # Parse the content of the web page with BeautifulSoup
         soup = BeautifulSoup(response.content, "html.parser")
 
-        page_text = soup.get_text(separator="\n", strip=True)
-        if len(page_text) > 8000:
-            summary_text = summary(page_text)
+        page_text = soup.get_text(separator=" ", strip=True)
+        if len(page_text) > 30000:
+            summary_text = ""
+            if question is not None:
+                summary_text = summary(content=page_text, question=question)
+            else:
+                summary_text = summary(content=page_text)
             return summary_text
         else:
             return page_text
@@ -455,16 +463,42 @@ def scrape(url):
         return f"An error occurred: {err}"
 
 
-def summary(content):
+func_summary = {
+    "name": "summary",
+    "description": "summarizes some content for you, outputs in markdown",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "content": {
+                "type": "string",
+                "description": "content to be summarized",
+            },
+            "question": {
+                "type": "string",
+                "description": "(Optional) a specific question about the url. Default: 'Provide a detailed summary, cite references and format in markdown'",
+            },
+        },
+        "required": ["content"],
+    },
+}
+
+
+def summary(
+    content,
+    question="Provide a detailed summary, cite references and format in markdown",
+):
     llm = ChatOpenAI(temperature=0, model=api_model)
     text_splitter = RecursiveCharacterTextSplitter(
         separators=["\n\n", "\n"], chunk_size=10000, chunk_overlap=500
     )
     docs = text_splitter.create_documents([content])
-    map_prompt = """
-    Write a detailed summary of the following text for a research purpose:
-    "{text}"
+
+    _summary_template = "{text}"
+
+    map_prompt = f"""
+    {question}
     SUMMARY:
+    "{_summary_template}"
     """
     map_prompt_template = PromptTemplate(template=map_prompt, input_variables=["text"])
 
