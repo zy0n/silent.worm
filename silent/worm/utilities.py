@@ -196,11 +196,9 @@ def text_to_image(prompt, filename):
             return f"local file path: {file_path}\nurl: {image_url}"
         else:
             print("Failed to download the image.")
-            return "FAILED"
     else:
         print("Failed to generate the image.")
     return "FAILED"
-    return "SUCCESS"
 
 
 func_text_to_speech = {
