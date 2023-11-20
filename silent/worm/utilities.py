@@ -27,7 +27,7 @@ import atexit
 def get_base_dir():
     if is_running_in_docker():
         return f"memory/{sub_directory}"
-    return f"./{sub_directory}"
+    return f"./local_memory/{sub_directory}"
 
 
 sub_directory = ""
@@ -540,7 +540,7 @@ def research(query):
 
     user_proxy = autogen.UserProxyAgent(
         name="User_proxy",
-        code_execution_config={"last_n_messages": 2, "work_dir": "coding"},
+        code_execution_config={"last_n_messages": 10, "work_dir": f"{get_base_dir()}"},
         is_termination_msg=lambda x: x.get("content", "")
         and x.get("content", "").rstrip().endswith("TERMINATE"),
         human_input_mode="TERMINATE",

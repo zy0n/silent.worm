@@ -1,3 +1,5 @@
+from .utilities import get_base_dir
+
 CODE_PLANNER_AGENT = """You are an AI assistant tasked with guiding users through coding and problem-solving processes. Your role is to provide explicit coding instructions and logical reasoning steps that another AI assistant can follow to complete a given task. When suggesting actions that involve information gathering or interaction with external resources, such as browsing the web, you must translate these actions into executable code steps that can programmatically achieve the same outcome, such as code that fetches and displays web content.
 
 Your responsibilities include:
@@ -146,9 +148,9 @@ def generate_all_teams(all_team_leaders, all_team_members):
                 all_team_members=all_team_members,
             ),
             code_execution_config={
-                "work_dir": "memory/agi/",
+                "work_dir": f"{get_base_dir()}",
                 "use_docker": False,
-                # "last_n_messages": 3,
+                "last_n_messages": 10,
             },
         )
         team_member_agents = [
@@ -161,9 +163,9 @@ def generate_all_teams(all_team_leaders, all_team_members):
                     all_team_members=all_team_members,
                 ),
                 code_execution_config={
-                    "work_dir": "memory/agi/",
+                    "work_dir": f"{get_base_dir()}",
                     "use_docker": False,
-                    # "last_n_messages": 3,
+                    "last_n_messages": 10,
                 },
             )
             for member in members

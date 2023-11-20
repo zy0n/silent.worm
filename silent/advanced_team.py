@@ -197,7 +197,7 @@ def spawn_assistant(name, professional_description):
         llm_config=spawn_asst_llm_config,
         function_map=asst_func_map,
         code_execution_config={
-            "work_dir": "memory/agency/",
+            "work_dir": f"{base_directory}",
             "use_docker": False,
             "last_n_messages": 3,
         },
@@ -235,7 +235,7 @@ def spawn_task_expert(task):
         human_input_mode="TERMINATE",
         function_map=user_func_map,
         code_execution_config={
-            "work_dir": f"memory/{base_directory}",
+            "work_dir": f"{base_directory}",
             "use_docker": False,
             "last_n_messages": 3,
         },
