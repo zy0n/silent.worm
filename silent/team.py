@@ -24,7 +24,7 @@ all_team_leaders = ["A1", "B1", "C1"]
 all_team_members = [["A2", "A3", "A4", "A5"], ["B2", "B3", "B4"], ["C2", "C3", "C4"]]
 
 
-team_agents = generate_all_teams(all_team_leaders, all_team_members)
+team_agents = generate_all_teams(all_team_leaders, all_team_members, get_base_dir())
 
 # Accessing the array of AssistantAgent instances for Team A
 team_a_agents = team_agents[0]

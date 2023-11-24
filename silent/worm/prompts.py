@@ -1,5 +1,3 @@
-from .utilities import get_base_dir
-
 CODE_PLANNER_AGENT = """You are an AI assistant tasked with guiding users through coding and problem-solving processes. Your role is to provide explicit coding instructions and logical reasoning steps that another AI assistant can follow to complete a given task. When suggesting actions that involve information gathering or interaction with external resources, such as browsing the web, you must translate these actions into executable code steps that can programmatically achieve the same outcome, such as code that fetches and displays web content.
 
 Your responsibilities include:
@@ -136,7 +134,7 @@ def get_team_member_info(name, team_leader, all_team_leaders, all_team_members):
 from autogen.agentchat.assistant_agent import AssistantAgent
 
 
-def generate_all_teams(all_team_leaders, all_team_members):
+def generate_all_teams(all_team_leaders, all_team_members, base_directory):
     team_agents = []
     for leader, members in zip(all_team_leaders, all_team_members):
         leader_agent = AssistantAgent(
@@ -148,7 +146,7 @@ def generate_all_teams(all_team_leaders, all_team_members):
                 all_team_members=all_team_members,
             ),
             code_execution_config={
-                "work_dir": f"{get_base_dir()}",
+                "work_dir": f"{base_directory}",
                 "use_docker": False,
                 "last_n_messages": 10,
             },
@@ -163,7 +161,7 @@ def generate_all_teams(all_team_leaders, all_team_members):
                     all_team_members=all_team_members,
                 ),
                 code_execution_config={
-                    "work_dir": f"{get_base_dir()}",
+                    "work_dir": f"{base_directory}",
                     "use_docker": False,
                     "last_n_messages": 10,
                 },
